@@ -39,6 +39,7 @@
 		<h5>LAST 5 ORDERS</h5>
 		<hr>
 		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="#">Create Order</a>
 			<table class="table table-sm">
 				<thead>
 					<tr>
@@ -56,10 +57,7 @@
 						<td>{{order.product}}</td>
 						<td>{{order.date_created|date}}</td>
 						<td>{{order.status}}</td>
-						<form action="{% url 'update-order' order.pk %}" method="POST">
-							{% csrf_token %}
-							<td><button class="btn btn-sm btn-info" type="submit">Update</button></td>
-						</form>
+						<td><a href="{% url 'update_order' order.id %}"><button class="btn btn-sm btn-info" type="button">Update</button></a></td>
 						<td><button class="btn btn-sm btn-danger" type="submit">Delete</button></td>
 					</tr>
 					{% endfor %}

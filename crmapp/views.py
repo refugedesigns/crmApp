@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, CreateView,DetailView,UpdateView
 from .models import Customer, Product, Order
 from .forms import CreateCustomerForm, OrderUpdateForm
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+
 
 
 # Create your views here.
@@ -50,23 +52,19 @@ class CustomerDetailView(DetailView):
         context['products'] = products
         return context
 
-class OrderUpdateView(UpdateView):
-    model = Order
-    form_class = OrderUpdateForm
-    template_name = 'crmapp/update-order.html'
-    context_object_name = 'order'
-    success_url = '/'
+def updateOrderView(request, pk):
+    order = Order.objects.get(id=pk)
 
-    def get_initial(self):
-        initial = super(OrderUpdateView, self).get_initial()
+    form = OrderUpdateForm(instance=order)
+    if request.method == "POST":
+        form = OrderUpdateForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {
+        'form':form,
+    }
+    return render(request,'crmapp/update_order.html',context)
 
-        content = self.get_object()
-        initial['customer'] = content.customer
-        initial['product'] = content.product
-        initial['status'] = content.status
 
-        return initial
 
-    def get_object(self, *args, **kwargs):
-        product = get_object_or_404(Order, pk=self.kwargs['pk'])
-        return product

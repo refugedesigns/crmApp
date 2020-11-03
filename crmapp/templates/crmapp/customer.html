@@ -76,7 +76,7 @@
 					<td>{{order.product.category}}</td>
 					<td>{{order.product.date_created}}</td>
 					<td>{{order.status}}</td>
-					<td><button class="btn btn-sm btn-info" type="submit">Update</button></td>
+					<td><a href="{% url 'update_order' order.id %}"><button class="btn btn-sm btn-info" type="submit">Update</button></a></td>
 					<td><button class="btn btn-sm btn-danger" type="submit">Delete</button></td>
 					</tr>
 					{% endfor %}

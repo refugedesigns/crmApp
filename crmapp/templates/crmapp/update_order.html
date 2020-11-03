@@ -6,9 +6,9 @@
     <div class="row">
         <div class="col-sm-6 offset-3">
             <br><br><br><br>
-                <form action="{% url 'update-order' order.pk %}" method="POST">
+                <form action="" method="POST">
                     {% csrf_token %}
-                    {{ form.as_p}}
+                    {{form|linebreaks}}
                     <button class="btn btn-primary btn-block" type="submit">Save</button>
                 </form>
             <br><br><br><br>
