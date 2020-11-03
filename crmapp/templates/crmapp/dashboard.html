@@ -11,7 +11,7 @@
 		<h5>CUSTOMERS:</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Create Customer</a>
+			<a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_customer' %}">Create Customer</a>
 			<table class="table table-sm">
 				<thead>
 				<tr>
@@ -24,7 +24,7 @@
 				<tbody>
 				{% for customer in customers%}
 				<tr>
-					<th><a class="btn btn-primary  btn-sm" href="">View</a></th>
+					<th><a class="btn btn-primary  btn-sm" href="{% url 'view_customer' customer.pk %}">View</a></th>
 					<th>{{customer.name}}</th>
 					<th>{{customer.phone}}</th>
 				</tr>
@@ -56,7 +56,10 @@
 						<td>{{order.product}}</td>
 						<td>{{order.date_created|date}}</td>
 						<td>{{order.status}}</td>
-						<td><button class="btn btn-sm btn-info" type="submit">Update</button></td>
+						<form action="{% url 'update-order' order.pk %}" method="POST">
+							{% csrf_token %}
+							<td><button class="btn btn-sm btn-info" type="submit">Update</button></td>
+						</form>
 						<td><button class="btn btn-sm btn-danger" type="submit">Delete</button></td>
 					</tr>
 					{% endfor %}
