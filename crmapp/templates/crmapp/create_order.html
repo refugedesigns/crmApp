@@ -1,0 +1,18 @@
+{% extends 'crmapp/main.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <br><br><br><br><br><br><br>
+                <form action="{% url 'create_order' %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p}}
+                    <button class="btn btn-primary btn-block" type="submit">Save</button>
+                </form>
+            <br><br><br><br>
+        </div>
+    </div>
+</div>
+{% endblock %}

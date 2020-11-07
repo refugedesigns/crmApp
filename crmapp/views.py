@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, CreateView,DetailView,UpdateView
 from .models import Customer, Product, Order
-from .forms import CreateCustomerForm, OrderUpdateForm
+from .forms import CreateCustomerForm, OrderUpdateForm, CustomerUpdateForm,CreateOrderForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
@@ -38,6 +38,12 @@ class CreateCustomerView(CreateView):
     template_name = 'crmapp/create_customer.html'
     success_url = '/'
 
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = CreateOrderForm
+    template_name = 'crmapp/create_order.html'
+    success_url = '/'
+
 class CustomerDetailView(DetailView):
     model = Customer
     template_name = 'crmapp/customer.html'
@@ -65,6 +71,22 @@ def updateOrderView(request, pk):
         'form':form,
     }
     return render(request,'crmapp/update_order.html',context)
+
+def customerUpdateView(request, pk):
+    customer = Customer.objects.get(id=pk)
+
+    form = CustomerUpdateForm(instance=customer)
+    if request.method == "POST":
+        form = CustomerUpdateForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('view_customer', pk=pk)
+        else:
+            form = CustomerUpdateForm(instance=customer)
+    context = {
+            'form': form
+        }
+    return render(request, 'crmapp/update_customer.html', context)
 
 
 
