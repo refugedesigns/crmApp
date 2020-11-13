@@ -39,7 +39,7 @@ class Order(models.Model):
     status = models.CharField(choices=options, null=True, max_length=200)
 
     def __str__(self):
-        return self.status
+        return f'Order by '+ ' ' + self.customer.name
 
     class Meta:
         ordering = ['-date_created']

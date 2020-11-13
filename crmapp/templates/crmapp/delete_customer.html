@@ -1,0 +1,14 @@
+{%  extends 'crmapp/main.html' %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="col-md-6 offset-3 text-center">
+        <br><br><br><br><br>
+        <p>Are you sure you want to delete {{customer}}?</p>
+        <a href="{% url 'home' %}" class="btn btn-danger mx-2">Cancel</a>
+        <button class="btn btn-warning mx-2" type="submit">Confirm</button>
+        <br><br><br><br><br><br><br>
+    </div>
+</form>
+{% endblock %}

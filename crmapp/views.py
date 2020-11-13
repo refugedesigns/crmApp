@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, CreateView,DetailView,UpdateView
+from django.views.generic import TemplateView, CreateView,DetailView,UpdateView,DeleteView
 from .models import Customer, Product, Order
 from .forms import CreateCustomerForm, OrderUpdateForm, CustomerUpdateForm,CreateOrderForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.http import HttpResponseRedirect, Http404
+
 
 
 
@@ -88,5 +90,34 @@ def customerUpdateView(request, pk):
         }
     return render(request, 'crmapp/update_customer.html', context)
 
+def orderDeleteView(request, pk):
+    order = Order.objects.get(id=pk)
+    if request.method == "POST":
+        order.delete()
+        return redirect('home')
+    context = {
+        'order': order
+    }
+    return render(request, 'crmapp/order.html', context)
 
+
+def orderDeleteInCustomerView(request, pk):
+    order = Order.objects.get(id=pk)
+    if request.method == "POST":
+        order.delete()
+        return redirect('view_customer', pk=order.customer.id)
+
+    context = {
+        'order': order,
+    }
+    return render(request, 'crmapp/order.html', context)
+
+def deleteCustomerView(request, pk):
+    customer = Customer.objects.get(pk=pk)
+
+    if request.method =="POST":
+        customer.delete()
+        return redirect('/')
+
+    return render(request, 'crmapp/delete_customer.html', {'customer':customer})
 
