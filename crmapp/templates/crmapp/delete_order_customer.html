@@ -5,8 +5,8 @@
     {% csrf_token %}
     <div class="col-md-6 offset-3 text-center">
         <br><br><br><br><br>
-        <p>Are you sure you want to delete {{customer.name}}?</p>
-        <a href="{% url 'view_customer' customer.pk %}" class="btn btn-danger mx-2">Cancel</a>
+        <p>Are you sure you want to delete {{order}}?</p>
+        <a href="{% url 'view_customer' order.customer.pk %}" class="btn btn-danger mx-2">Cancel</a>
         <button class="btn btn-warning mx-2" type="submit">Confirm</button>
         <br><br><br><br><br><br><br>
     </div>

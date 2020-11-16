@@ -5,7 +5,8 @@ from .forms import CreateCustomerForm, OrderUpdateForm, CustomerUpdateForm,Creat
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
-
+from django.forms import inlineformset_factory
+from django import forms
 
 
 
@@ -20,7 +21,8 @@ class HomeView(TemplateView):
 
         customers = Customer.objects.all()
         products = Product.objects.all()
-        orders = Order.objects.all()[:5]
+        orders = Order.objects.all()
+        first_five = Order.objects.all()[:5]
         delivered = Order.objects.filter(status='Delivered')
         pending = Order.objects.filter(status='Pending')
         
@@ -30,6 +32,7 @@ class HomeView(TemplateView):
             'orders': orders,
             'delivered': delivered,
             'pending': pending,
+            'first_five': first_five,
         }
         return context
 
@@ -40,11 +43,29 @@ class CreateCustomerView(CreateView):
     template_name = 'crmapp/create_customer.html'
     success_url = '/'
 
-class OrderCreateView(CreateView):
-    model = Order
-    form_class = CreateOrderForm
-    template_name = 'crmapp/create_order.html'
-    success_url = '/'
+
+def orderCreateView(request, pk):
+    OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), widgets={
+     'product': forms.Select(attrs={'class': 'form-control'}),
+     'status': forms.Select(attrs={'class': 'form-control'}),
+    })
+    
+    customer = Customer.objects.get(id=pk)
+    #form = CreateOrderForm(initial={'customer': customer})
+    formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
+    if request.method == 'POST':
+        formset = OrderFormSet(request.POST, instance=customer)
+        if formset.is_valid():
+            formset.save()
+            return redirect('view_customer', pk=pk)
+    context = {
+        'formset': formset,
+        'customer':customer
+    }
+    return render(request, 'crmapp/create_order.html', context)
+
+
+
 
 class CustomerDetailView(DetailView):
     model = Customer
@@ -98,7 +119,7 @@ def orderDeleteView(request, pk):
     context = {
         'order': order
     }
-    return render(request, 'crmapp/order.html', context)
+    return render(request, 'crmapp/delete_order_home.html', context)
 
 
 def orderDeleteInCustomerView(request, pk):
@@ -110,7 +131,7 @@ def orderDeleteInCustomerView(request, pk):
     context = {
         'order': order,
     }
-    return render(request, 'crmapp/order.html', context)
+    return render(request, 'crmapp/delete_order_customer.html', context)
 
 def deleteCustomerView(request, pk):
     customer = Customer.objects.get(pk=pk)

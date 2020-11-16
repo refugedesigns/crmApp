@@ -2,6 +2,7 @@ from django import forms
 from .models import Customer, Order
 
 
+
 class CreateCustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
@@ -67,3 +68,5 @@ class CreateOrderForm(forms.ModelForm):
         self.fields['customer'].label = ""
         self.fields['product'].label = ""
         self.fields['status'].label = ""
+
+        

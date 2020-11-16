@@ -5,14 +5,36 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6 offset-3">
-            <br><br><br><br><br><br><br>
-                <form action="{% url 'create_order' %}" method="POST">
+            <br><br><br><br><br>
+                <h2>Customer: {{customer.name}}</h2>
+                <br>
+                <form action="" method="POST">
                     {% csrf_token %}
+                    {{formset.management_form}}
+                    {% for form in formset %}
                     {{ form.as_p}}
+                    <hr>
+                    {% endfor %}
                     <button class="btn btn-primary btn-block" type="submit">Save</button>
                 </form>
             <br><br><br><br>
         </div>
     </div>
 </div>
+
+<style>
+    label{
+        display:none;
+    }
+    #id_order_set-0-DELETE{
+        display:none;
+    }
+    #id_order_set-1-DELETE{
+        display:none;
+    }
+    #id_order_set-2-DELETE{
+        display:none;
+    }
+</style>
+
 {% endblock %}
