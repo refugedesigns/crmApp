@@ -1,5 +1,7 @@
 from django import forms
 from .models import Customer, Order
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 
@@ -69,4 +71,37 @@ class CreateOrderForm(forms.ModelForm):
         self.fields['product'].label = ""
         self.fields['status'].label = ""
 
-        
+
+class UserOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('product', 'status')
+
+        widgets = {
+            'product': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UserOrderForm, self).__init__(*args, **kwargs)
+        self.fields['product'].label = ""
+        self.fields['status'].label = ""
+
+
+class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']       
+
+
+class CustomerSettingsForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+        exclude = ['user']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }

@@ -1,0 +1,36 @@
+{% extends 'crmapp/main.html' %}
+
+{% block content %}
+<div class="container">
+<section class="row mt-5">
+    <div class="col-4">
+        <div>
+            <a class="btn btn-warning btn-block" href="{% url 'user_page' %}">Back to Profile</a>
+        </div>
+        <div>
+            <h3 class="text-center mt-2">Account Settings</h3>
+            {% if request.user.customer.profile_pic.url %}
+            <img class="profile-pic img-responsive thumbnail mx-auto d-flex justify-content-center" src="{{request.user.customer.profile_pic.url}}" alt="">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-6">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button class="btn btn-primary btn-block">Submit</button>
+        </form>
+    </div>
+</section>
+</div>
+<style>
+    .profile-pic{
+        max-width: 300px;
+        max-height: 300px;
+        margin: 0 auto;
+        border-radius: 50%;
+    }
+</style>
+
+{% endblock %}
